@@ -1,0 +1,54 @@
+1. ipconfig 
+ipconfig
+ipconfig /all
+ipconfig /release
+ipconfig /renew
+ipconfig /flushdns
+  
+2. ifconfig / ip 
+
+ifconfig
+sudo ifconfig eth0 down
+sudo ifconfig eth0 up
+3. ping
+Test connectivity to another host.
+
+
+ping 8.8.8.8
+ping google.com
+  
+4. tracert / traceroute
+
+tracert google.com    
+
+5. netstat
+
+netstat
+netstat -an
+netstat -r
+  
+6. nslookup
+
+nslookup google.com
+nslookup 8.8.8.8
+  
+7. dig
+dig google.com
+  
+8. arp
+arp -a
+arp -d *
+  
+9. route
+route print       # Windows
+route -n  
+
+
+10. telnet
+telnet example.com 80
+  
+11. curl / wget
+
+curl http://example.com
+wget http://example.com
+
