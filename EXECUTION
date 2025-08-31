@@ -1,0 +1,21 @@
+Step 1: Save Server java file as Server.java and Client java file as Client.java.
+Step 2: Open two cmd prompt for client and server.
+Step 3: Set path for javac compiler and java interpreter in cmd prompt as follows
+
+set path=” C:\Program Files\Java\jdk1.7.0_79\bin”;
+
+Step 4: Compile your server java program as follows
+
+javac Server.java
+It generates Bytecode file (or Object file) as Server.class
+Step 5: Compile your client java program as follows
+
+javac Client.java
+It generates Bytecode file (or Object file) as Client.class
+Step 6: Execute your server java program as follows
+
+java Server
+
+Step 7: Execute your client java program as follows
+
+java Client
