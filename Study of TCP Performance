@@ -1,0 +1,271 @@
+AIM:
+To study about TCP performance in detail.
+Introduction :
+The transmission Control Protocol (TCP) is one of the most important protocols of Internet
+Protocols suite. It is most widely used protocol for data transmission in communication network
+such as internet.
+Features
+● TCP is reliable protocol. That is, the receiver always sends either positive or negative
+acknowledgement about the data packet to the sender, so that the sender always has bright
+clue about whether the data packet is reached the destination or it needs to resend it.
+● TCP ensures that the data reaches intended destination in the same order it was sent.
+● TCP is connection oriented. TCP requires that connection between two remote points be
+established before sending actual data.
+● TCP provides error-checking and recovery mechanism.
+● TCP provides end-to-end communication.
+● TCP provides flow control and quality of service.
+● TCP operates in Client/Server point-to-point mode.
+● TCP provides full duplex server, i.e. it can perform roles of both receiver and sender.
+Header
+The length of TCP header is minimum 20 bytes long and maximum 60 bytes.
+Source port address. This is a 16-bit field that defines the port number of the application
+program in the host that is sending the segment.
+Destination port address. This is a 16-bit field that defines the port number of the application
+program in the host that is receiving the segment.
+
+Source port address. This is a 16-bit field that defines the port number of the
+application program in the host that is sending the segment.
+Destination port address. This is a 16-bit field that defines the port number of the application
+program in the host that is receiving the segment.
+Sequence number. This 32-bit field defines the number assigned to the first byte of data
+contained in this segment. TCP is a stream transport protocol. To ensure connectivity, each
+byte to be transmitted is numbered. The sequence number tells the destination which byte in
+this sequence is the first byte in the segment. During connection establishment each party
+
+uses a random number generator to create an initial sequence number (ISN), which is
+usually different in each direction.
+Acknowledgment number. This 32-bit field defines the byte number that the receiver of the
+segment is expecting to receive from the other party. If the receiver of the segment has
+successfully received byte number x from the other party, it returns x + 1 as the
+acknowledgment number. Acknowledgment and data can be piggybacked together.
+Header length. This 4-bit field indicates the number of 4-byte words in the TCP header. The
+length of the header can be between 20 and 60 bytes. Therefore, the value of this field is
+always between 5 (5 × 4 = 20) and 15 (15 × 4 = 60).
+Control. This field defines 6 different control bits or flags. One or more of these bits can be set
+at a time. These bits enable flow control, connection establishment and termination,
+connection abortion, and the mode of data transfer in TCP.
+Window size. This field defines the window size of the sending TCP in bytes. Note that the
+length of this field is 16 bits, which means that the maximum size of the window is 65,535
+bytes. This value is normally referred to as the receiving window (rwnd) and is determined
+by the receiver. The sender must obey the dictation of the receiver in this case.
+Checksum. This 16-bit field contains the checksum. The calculation of the checksum for TCP
+follows the same procedure as the one described for UDP. However, the use of the checksum
+in the UDP datagram is optional, whereas
+the use of the checksum for TCP is mandatory. The same pseudoheader, serving the same
+purpose, is added to the segment. For the TCP pseudoheader, the value for the protocol field
+is 6.
+Urgent pointer. This 16-bit field, which is valid only if the urgent flag is set, is used when the
+segment contains urgent data. It defines a value that must be added to the sequence number
+to obtain the number of the last urgent byte in the data section of the segment.
+Options. There can be up to 40 bytes of optional information in the TCP header.
+Addressing
+TCP communication between two remote hosts is done by means of port numbers (TSAPs).
+Ports numbers can range from 0 – 65535 which are divided as:
+● System Ports (0 – 1023)
+● User Ports ( 1024 – 49151)
+● Private/Dynamic Ports (49152 – 65535)
+Connection Management
+TCP communication works in Server/Client model. The client initiates the connection and the
+server either accepts or rejects it. Three-way handshaking is used for connection management.
+
+Establishment
+Client initiates the connection and sends the segment with a Sequence number. Server
+acknowledges it back with its own Sequence number and ACK of client’s segment which is one
+more than client’s Sequence number. Client after receiving ACK of its segment sends an
+acknowledgement of Server’s response.
+Release
+Either of server and client can send TCP segment with FIN flag set to 1. When the receiving
+end responds it back by Acknowledging FIN, that direction of TCP communication is closed and
+connection is released.
+Bandwidth Management
+TCP uses the concept of window size to accommodate the need of Bandwidth management.
+Window size tells the sender at the remote end, the number of data byte segments the receiver at
+this end can receive. TCP uses slow start phase by using window size 1 and increases the window
+size exponentially after each successful communication.
+For example, the client uses windows size 2 and sends 2 bytes of data. When the
+acknowledgement of this segment received the windows size is doubled to 4 and next sent the
+segment sent will be 4 data bytes long. When the acknowledgement of 4-byte data segment is
+received, the client sets windows size to 8 and so on.
+If an acknowledgement is missed, i.e. data lost in transit network or it received NACK, then
+the window size is reduced to half and slow start phase starts again.
+Error Control &and Flow Control
+TCP uses port numbers to know what application process it needs to handover the data
+segment. Along with that, it uses sequence numbers to synchronize itself with the remote host. All
+
+data segments are sent and received with sequence numbers. The Sender knows which last data
+segment was received by the Receiver when it gets ACK. The Receiver knows about the last
+segment sent by the Sender by referring to the sequence number of recently received packet.
+If the sequence number of a segment recently received does not match with the sequence
+number the receiver was expecting, then it is discarded and NACK is sent back. If two segments
+arrive with the same sequence number, the TCP timestamp value is compared to make a decision.
+Multiplexing
+The technique to combine two or more data streams in one session is called Multiplexing.
+When a TCP client initializes a connection with Server, it always refers to a welldefined port number
+which indicates the application process. The client itself uses a randomly generated port number
+from private port number pools.
+Using TCP Multiplexing, a client can communicate with a number of different application
+process in a single session. For example, a client requests a web page which in turn contains different
+types of data (HTTP, SMTP, FTP etc.) the TCP session timeout is increased and the session is kept
+open for longer time so that the three-way handshake overhead can be avoided.
+This enables the client system to receive multiple connection over single virtual connection.
+These virtual connections are not good for Servers if the timeout is too long.
+Congestion Control
+When large amount of data is fed to system which is not capable of handling it, congestion
+occurs. TCP controls congestion by means of Window mechanism. TCP sets a window size telling
+the other end how much data segment to send. TCP may use three algorithms for congestion control:
+∙ Additive increase, Multiplicative Decrease
+∙ Slow Start
+∙ Timeout React
+Timer Management
+TCP uses different types of timer to control and management various tasks:
+Keep-alive timer:
+∙ This timer is used to check the integrity and validity of a connection.
+∙ When keep-alive time expires, the host sends a probe to check if the connection still exists.
+Retransmission timer:
+∙ This timer maintains stateful session of data sent.
+∙ If the acknowledgement of sent data does not receive within the Retransmission time, the data
+segment is sent again.
+Persist timer:
+∙ TCP session can be paused by either host by sending Window Size 0.
+∙ To resume the session a host needs to send Window Size with some larger value. ∙ If this segment
+never reaches the other end, both ends may wait for each other for infinite time.
+∙ When the Persist timer expires, the host re-sends its window size to let the other end know.
+∙ Persist Timer helps avoid deadlocks in communication.
+Timed-Wait:
+∙ After releasing a connection, either of the hosts waits for a Timed-Wait time to terminate the
+connection completely.
+∙ This is in order to make sure that the other end has received the acknowledgement of its connection
+termination request.
+∙ Timed-out can be a maximum of 240 seconds (4 minutes).
+
+Crash Recovery
+TCP is very reliable protocol. It provides sequence number to each of byte sent in segment.
+It provides the feedback mechanism i.e. when a host receives a packet, it is bound to ACK that
+packet having the next sequence number expected (if it is not the last segment).
+When a TCP Server crashes mid-way communication and re-starts its process it sends TPDU
+broadcast to all its hosts. The hosts can then send the last data segment which was never
+unacknowledged and carry onwards.
+Algorithm
+1. Create a simulator object
+2. Define different flows for data flows
+3. Trace all events in a nam file and text file
+4. Create source nodes (s1, s2, s3), gateway (G) and receiver (r)
+5. Describe their layout topology
+6. Specify the link between nodes
+7. Define the queue size between nodes G and r as 5
+8. Monitor queue on all links vertically 90°
+9. Create TCP agents tcp1, tcp2, tcp3 and attach it to nodes s1, s2 and s3 respectively
+10. Create three TCP sinks and attach it to node r
+11. Connect traffic sources to the sink
+12. Create FTP agents ftp1, ftp2, ftp3 and attach it to tcp1, tcp2 and tcp3 respectively
+13. Label the nodes at start time
+14. Schedule ftp1, ftp2, ftp3 to start at 0.1 and stop at 5.0 seconds
+15. Call finish procedure at 5.25 seconds
+16. Run the simulation
+17. Execute NAM on the trace file
+18. Observe the simulated events on the NAM editor and packet flow on link G to r
+19. View the trace file and analyse the events
+20. Stop
+PROGRAM : File name - TCP.tcl
+#Create a simulator object
+set ns [new Simulator]
+#Open trace files
+set f [open droptail-queue-out.tr w]
+$ns trace-all $f
+#Open the nam trace file
+set nf [open droptail-queue-out.nam w]
+$ns namtrace-all $nf
+#s1, s2 and s3 act as sources.
+set s1 [$ns node]
+set s2 [$ns node]
+set s3 [$ns node]
+#G acts as a gateway
+set G [$ns node]
+#r acts as a receiver
+set r [$ns node]
+#Define different colors for data flows
+$ns color 1 red
+
+$ns color 2 SeaGreen
+$ns color 3 blue
+#Create links between the nodes
+$ns duplex-link $s1 $G 6Mb 10ms DropTail
+$ns duplex-link $s2 $G 6Mb 10ms DropTail
+$ns duplex-link $s3 $G 6Mb 10ms DropTail
+$ns duplex-link $G $r 3Mb 10ms DropTail
+#Define the layout of the nodes
+$ns duplex-link-op $s1 $G orient right-up
+$ns duplex-link-op $s2 $G orient right
+$ns duplex-link-op $s3 $G orient right-down
+$ns duplex-link-op $G $r orient right
+#Define the queue size for the link between node G and r
+$ns queue-limit $G $r 5
+#Monitor the queues for links vertically
+$ns duplex-link-op $s1 $G queuePos 0.5
+$ns duplex-link-op $s2 $G queuePos 0.5
+$ns duplex-link-op $s3 $G queuePos 0.5
+$ns duplex-link-op $G $r queuePos 0.5
+#Create a TCP agent and attach it to node s1
+set tcp1 [new Agent/TCP/Reno]
+$ns attach-agent $s1 $tcp1
+$tcp1 set window_ 8
+$tcp1 set fid_ 1
+#Create a TCP agent and attach it to node s2
+set tcp2 [new Agent/TCP/Reno]
+$ns attach-agent $s2 $tcp2
+$tcp2 set window_ 8
+$tcp2 set fid_ 2
+#Create a TCP agent and attach it to node s3
+set tcp3 [new Agent/TCP/Reno]
+$ns attach-agent $s3 $tcp3
+$tcp3 set window_ 4
+$tcp3 set fid_ 3
+#Create TCP sink agents and attach them to node r
+set sink1 [new Agent/TCPSink]
+set sink2 [new Agent/TCPSink]
+set sink3 [new Agent/TCPSink]
+$ns attach-agent $r $sink1
+$ns attach-agent $r $sink2
+$ns attach-agent $r $sink3
+#Connect the traffic sources with the traffic sinks
+$ns connect $tcp1 $sink1
+$ns connect $tcp2 $sink2
+$ns connect $tcp3 $sink3
+
+#Create FTP applications and attach them to agents
+set ftp1 [new Application/FTP]
+$ftp1 attach-agent $tcp1
+set ftp2 [new Application/FTP]
+$ftp2 attach-agent $tcp2
+set ftp3 [new Application/FTP]
+$ftp3 attach-agent $tcp3
+#Define a 'finish' procedure
+proc finish {} {
+global ns
+$ns flush-trace
+puts "running nam..."
+exec nam -a droptail-queue-out.nam &
+exit 0
+}
+#Define label for nodes
+$ns at 0.0 "$s1 label Sender1"
+$ns at 0.0 "$s2 label Sender2"
+$ns at 0.0 "$s3 label Sender3"
+$ns at 0.0 "$G label Gateway"
+$ns at 0.0 "$r label Receiver"
+#Schedule ftp events
+$ns at 0.1 "$ftp1 start"
+$ns at 0.1 "$ftp2 start"
+$ns at 0.1 "$ftp3 start"
+$ns at 5.0 "$ftp1 stop"
+$ns at 5.0 "$ftp2 stop"
+$ns at 5.0 "$ftp3 stop"
+#Call finish procedure after 5 seconds of simulation time
+$ns at 5.25 "finish"
+#Run the simulation
+$ns run
+
+OUTPUT:
+
+RESULT:
+Thus the TCP performance is studied in detail.
