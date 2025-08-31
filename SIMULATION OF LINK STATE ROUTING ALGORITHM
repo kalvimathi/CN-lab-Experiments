@@ -1,0 +1,81 @@
+EX.NO. 9.B. SIMULATION OF LINK STATE ROUTING ALGORITHM
+AIM:
+To simulate and observe traffic route of a network using link state routing algorithm.
+ALGORITHM:
+Step 1: Create a simulator object
+Step 2: Trace packets on all links on to NAM trace and text trace file.
+Step 3: Define finish procedure to close files, flash tracing and run NAM
+Step 4: Create 5 nodes
+Step 5: Specify the link characteristics between the nodes
+Step 6: Describer their layout topology as a octagon
+Step 7: Add UDP agent for node n0
+Step 8: Create CBR traffic on the top of UDP and set traffic parameters
+Step 9: Add NULL agent to node n3
+Step 10: Connect source and sink
+Step 11: Set routing protocol to Distance vector routing
+Step 12: Start the scheduler
+Step 13: Observe the traffic route when the link is up and down
+Step 14: View the simulated events and trace file analyze it
+Step 15: Stop.
+PROGRAM:
+set ns [new Simulator]
+set nr [open thro.tr w]
+$ns trace-all $nr
+set nf [open thro.nam w]
+$ns namtrace-all $nf
+proc finish { } {
+global ns nr nf
+$ns flush-trace
+close $nf
+close $nr
+exec nam thro.nam &
+exit 0
+}
+for { set i 0 } { $i < 12} { incr i 1 } {
+set n($i) [$ns node]}
+for {set i 0} {$i < 8} {incr i} {
+$ns duplex-link $n($i) $n([expr $i+1]) 1Mb 10ms DropTail }
+$ns duplex-link $n(0) $n(8) 1Mb 10ms DropTail
+$ns duplex-link $n(1) $n(10) 1Mb 10ms DropTail
+$ns duplex-link $n(0) $n(9) 1Mb 10ms DropTail
+$ns duplex-link $n(9) $n(11) 1Mb 10ms DropTail
+$ns duplex-link $n(10) $n(11) 1Mb 10ms DropTail
+$ns duplex-link $n(11) $n(5) 1Mb 10ms DropTail
+set udp0 [new Agent/UDP]
+$ns attach-agent $n(0) $udp0
+set cbr0 [new Application/Traffic/CBR]
+
+$cbr0 set packetSize_ 500
+$cbr0 set interval_ 0.005
+$cbr0 attach-agent $udp0
+set null0 [new Agent/Null]
+$ns attach-agent $n(5) $null0
+$ns connect $udp0 $null0
+set udp1 [new Agent/UDP]
+$ns attach-agent $n(1) $udp1
+set cbr1 [new Application/Traffic/CBR]
+$cbr1 set packetSize_ 500
+$cbr1 set interval_ 0.005
+$cbr1 attach-agent $udp1
+set null0 [new Agent/Null]
+$ns attach-agent $n(5) $null0
+$ns connect $udp1 $null0
+$ns rtproto LS
+$ns rtmodel-at 10.0 down $n(11) $n(5)
+$ns rtmodel-at 15.0 down $n(7) $n(6)
+$ns rtmodel-at 30.0 up $n(11) $n(5)
+$ns rtmodel-at 20.0 up $n(7) $n(6)
+$udp0 set fid_ 1
+$udp1 set fid_ 2
+$ns color 1 Red
+$ns color 2 Green
+$ns at 1.0 "$cbr0 start"
+$ns at 2.0 "$cbr1 start"
+$ns at 45 "finish"
+$ns run
+
+OUTPUT:
+
+RESULT:
+Thus the simulation of link state routing algorithm using ns2 has been executed
+successfully and output got verified.
